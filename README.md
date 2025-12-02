@@ -15,11 +15,11 @@ React, TypeScript, Google Gemini APIを使用して構築された、クラシ�
 
 ## 使用技術
 
-*   **Frontend**: React 19, TypeScript
+*   **Frontend**: React, TypeScript, Vite
 *   **Styling**: Tailwind CSS
 *   **AI Integration**: Google GenAI SDK (`@google/genai`)
 *   **Icons**: Lucide React
-*   **Build Tooling**: (Vite等の標準的なビルド環境を想定)
+*   **Deployment**: Vercel Ready
 
 ## 始め方
 
@@ -34,13 +34,26 @@ React, TypeScript, Google Gemini APIを使用して構築された、クラシ�
     npm install
     ```
 
-3.  **APIキーの設定**:
-    有効な Google Gemini API キーを環境変数 `API_KEY` として設定するか、ビルドプロセスで構成してください。
-
-4.  **アプリケーションの実行**:
-    ```bash
-    npm start
+3.  **環境変数の設定**:
+    プロジェクトルートに `.env` ファイルを作成し、Google Gemini API キーを設定してください。
+    
+    `.env` ファイルの内容:
+    ```env
+    VITE_API_KEY=your_google_genai_api_key
     ```
+    ※ Vercel等のホスティングサービスにデプロイする場合は、環境変数設定画面で `VITE_API_KEY` を追加してください。
+
+4.  **開発サーバーの起動**:
+    ```bash
+    npm run dev
+    ```
+    ブラウザで `http://localhost:5173` を開いてください。
+
+5.  **ビルド (本番用)**:
+    ```bash
+    npm run build
+    ```
+    `dist` フォルダに静的ファイルが生成されます。
 
 ## 操作方法
 
@@ -66,17 +79,17 @@ React, TypeScript, Google Gemini APIを使用して構築された、クラシ�
 
 ## プロジェクト構造
 
-*   **`App.tsx`**: メインアプリケーションコントローラー。レイアウト、グローバル状態（オーディオ、ゲーム開始など）、入力ルーティングを管理します。
-*   **`hooks/useTetris.ts`**: コアゲームロジックエンジン。グリッド管理、ピースの移動、衝突判定、ゲームループを制御します。
-*   **`services/geminiService.ts`**: Google Gemini API とのインターフェース。画像生成のためのプロンプト構築などを処理します。
-*   **`services/audioService.ts`**: 生成的な音楽と合成効果音のための Web Audio API 実装です。
-*   **`components/TitleScreen.tsx`**: エントリーポイントとなるUI。「AI Background Studio」を含み、カスタム壁紙の生成を行います。
-*   **`components/Board.tsx`**: ゲームグリッドを描画し、ライン消去や落下のアニメーションを担当します。
+*   **`src/App.tsx`**: メインアプリケーションコントローラー。レイアウト、グローバル状態（オーディオ、ゲーム開始など）、入力ルーティングを管理します。
+*   **`src/hooks/useTetris.ts`**: コアゲームロジックエンジン。グリッド管理、ピースの移動、衝突判定、ゲームループを制御します。
+*   **`src/services/geminiService.ts`**: Google Gemini API とのインターフェース。画像生成のためのプロンプト構築などを処理します。
+*   **`src/services/audioService.ts`**: 生成的な音楽と合成効果音のための Web Audio API 実装です。
+*   **`src/components/TitleScreen.tsx`**: エントリーポイントとなるUI。「AI Background Studio」を含み、カスタム壁紙の生成を行います。
+*   **`src/components/Board.tsx`**: ゲームグリッドを描画し、ライン消去や落下のアニメーションを担当します。
 
 ## 使用しているAIモデル
 
 *   **Gemini 2.5 Flash**: (オプション) カラーテーマの生成ロジックに使用 (`geminiService`内に実装)。
-*   **Gemini 3.0 Pro Image Preview**: 高品質な背景画像の生成に使用。
+*   **Gemini 3.0 Pro Image Preview**: 高品質な背景画像の生成に使用 (`gemini-3-pro-image-preview`)。
 
 ## ライセンス
 
