@@ -3,13 +3,11 @@ type SoundType = 'move' | 'rotate' | 'drop' | 'clear' | 'gameover' | 'levelUp' |
 class AudioService {
   private ctx: AudioContext | null = null;
   private masterGain: GainNode | null = null;
-  private bgmGain: GainNode | null = null;
   private isMuted: boolean = false;
   private nextNoteTime: number = 0;
   private isPlayingBgm: boolean = false;
   private timerID: number | undefined;
 
-  // Simple pentatonic scale frequencies for generative music
   private scale = [
     261.63, // C4
     293.66, // D4
@@ -25,10 +23,11 @@ class AudioService {
 
   private init() {
     if (!this.ctx) {
-      this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      this.ctx = new AudioContextClass();
       this.masterGain = this.ctx.createGain();
       this.masterGain.connect(this.ctx.destination);
-      this.masterGain.gain.value = 0.3; // Default volume
+      this.masterGain.gain.value = 0.3;
     }
     if (this.ctx.state === 'suspended') {
       this.ctx.resume();
@@ -104,12 +103,12 @@ class AudioService {
         break;
 
       case 'clear':
-        // Sparkle effect
         [0, 0.1, 0.2].forEach((delay, i) => {
-            const o = this.ctx!.createOscillator();
-            const g = this.ctx!.createGain();
+            if (!this.ctx || !this.masterGain) return;
+            const o = this.ctx.createOscillator();
+            const g = this.ctx.createGain();
             o.connect(g);
-            g.connect(this.masterGain!);
+            g.connect(this.masterGain);
             o.type = 'sine';
             o.frequency.setValueAtTime(523.25 * (i + 1), t + delay);
             g.gain.setValueAtTime(0.1, t + delay);
@@ -131,20 +130,15 @@ class AudioService {
     }
   }
 
-  // Generative Ambient BGM
   private scheduleNote() {
     if (!this.isPlayingBgm || !this.ctx || !this.masterGain) return;
 
     const secondsPerBeat = 0.5;
     const t = this.ctx.currentTime;
     
-    // Schedule ahead
     while (this.nextNoteTime < t + 0.1) {
         this.nextNoteTime += secondsPerBeat;
-        
-        // Random note from scale
         const note = this.scale[Math.floor(Math.random() * this.scale.length)];
-        // Sometimes play a lower octave bass note
         const isBass = Math.random() < 0.2;
         const freq = isBass ? note / 2 : note;
 
@@ -157,7 +151,6 @@ class AudioService {
         osc.connect(gain);
         gain.connect(this.masterGain);
         
-        // Envelope
         const attack = 0.02;
         const release = isBass ? 1.5 : 0.8;
         
@@ -176,8 +169,10 @@ class AudioService {
     this.init();
     if (this.isPlayingBgm) return;
     this.isPlayingBgm = true;
-    this.nextNoteTime = this.ctx!.currentTime + 0.1;
-    this.scheduleNote();
+    if (this.ctx) {
+      this.nextNoteTime = this.ctx.currentTime + 0.1;
+      this.scheduleNote();
+    }
   }
 
   public stopMusic() {

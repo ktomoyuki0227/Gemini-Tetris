@@ -29,16 +29,13 @@ export const checkCollision = (
   return false;
 };
 
-// Custom hook for interval (Game Loop)
 function useInterval(callback: () => void, delay: number | null) {
   const savedCallback = useRef<() => void>(() => {});
 
-  // Remember the latest callback.
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
 
-  // Set up the interval.
   useEffect(() => {
     function tick() {
       if (savedCallback.current) savedCallback.current();
@@ -56,12 +53,8 @@ export const useTetris = () => {
   const [gameOver, setGameOver] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [dropTime, setDropTime] = useState<number | null>(null);
-  
-  // Animation states
   const [clearingRows, setClearingRows] = useState<number[]>([]);
   const [isCommitting, setIsCommitting] = useState(false); 
-  
-  // Hold state
   const [holdPiece, setHoldPiece] = useState<Tetromino | null>(null);
   const [isHeld, setIsHeld] = useState(false);
 
@@ -138,7 +131,7 @@ export const useTetris = () => {
         collided: false,
       });
       setNextPiece(randomTetromino());
-      setIsHeld(false); // Reset hold usage for the new turn
+      setIsHeld(false);
       
       const dummyPlayer = {
           pos: { x: BOARD_WIDTH / 2 - 2, y: 0 },
@@ -180,12 +173,10 @@ export const useTetris = () => {
   }, [player, holdPiece, nextPiece, gameOver, isPaused, isHeld, clearingRows]);
 
   const updateStage = useCallback(() => {
-    // 1. Flush the stage from the previous render
     const newStage = grid.map(row =>
       row.map(cell => (cell.isLocked ? cell : { type: '0', color: '0', isLocked: false }))
     ) as Grid;
 
-    // 2. Draw the tetromino
     player.tetromino.shape.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value !== 0) {
@@ -202,7 +193,6 @@ export const useTetris = () => {
       });
     });
 
-    // 3. Check if player collided
     if (player.collided) {
         const lockedStage = newStage.map(row => 
             row.map(cell => {
@@ -237,7 +227,6 @@ export const useTetris = () => {
     return newStage;
   }, [player, grid]);
 
-  // Handle animation and actual row clearing
   useEffect(() => {
       if (clearingRows.length > 0) {
           const timer = setTimeout(() => {
@@ -290,7 +279,6 @@ export const useTetris = () => {
     if (clearingRows.length > 0) return;
     setDropTime(null);
     drop();
-    // Resume auto drop
     if (!gameOver && !isPaused) {
         const newSpeed = 1000 / ((Math.floor(rowsCleared / 10) + 1) + 0.2);
         setDropTime(newSpeed);

@@ -4,8 +4,7 @@ import { DEFAULT_THEME } from '../constants';
 
 const apiKey = import.meta.env.VITE_API_KEY;
 
-// Initialize only if API key is present to prevent startup errors, 
-// though calls will fail if it's missing.
+// Initialize only if API key is present
 const ai = new GoogleGenAI({ apiKey: apiKey || 'dummy-key-for-build' });
 
 export const generateTheme = async (prompt: string): Promise<Theme> => {
@@ -18,20 +17,25 @@ export const generateTheme = async (prompt: string): Promise<Theme> => {
 
     const response = await ai.models.generateContent({
       model: modelId,
-      contents: `Create a Tetris color theme based on this description: "${prompt}". 
-      Ensure colors have good contrast against the board background. 
-      The background should be a valid CSS background property (e.g., hex, rgba, or linear-gradient).`,
+      contents: {
+        role: 'user',
+        parts: [{
+          text: `Create a Tetris color theme based on this description: "${prompt}". 
+          Ensure colors have good contrast against the board background. 
+          The background should be a valid CSS background property (e.g., hex, rgba, or linear-gradient).`
+        }]
+      },
       config: {
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
           properties: {
             name: { type: Type.STRING },
-            background: { type: Type.STRING, description: "Main page background, e.g. 'linear-gradient(...)' or hex" },
-            boardBackground: { type: Type.STRING, description: "The grid background color, usually dark" },
-            gridColor: { type: Type.STRING, description: "Color of grid lines" },
-            textColor: { type: Type.STRING, description: "Primary text color" },
-            accentColor: { type: Type.STRING, description: "UI accent color" },
+            background: { type: Type.STRING, description: "Main page background" },
+            boardBackground: { type: Type.STRING, description: "Grid background" },
+            gridColor: { type: Type.STRING, description: "Grid lines color" },
+            textColor: { type: Type.STRING, description: "Text color" },
+            accentColor: { type: Type.STRING, description: "Accent color" },
             pieceColors: {
               type: Type.OBJECT,
               properties: {
@@ -85,6 +89,9 @@ export const generateBackgroundImage = async (prompt: string, size: '1K' | '2K' 
       },
     });
 
+    // In 0.1.0 we access parts slightly differently or check inlineData
+    // Note: The structure of response depends on the specific 0.1.0 types.
+    // Assuming standard candidate structure.
     for (const part of response.candidates?.[0]?.content?.parts || []) {
       if (part.inlineData) {
         const base64EncodeString: string = part.inlineData.data;

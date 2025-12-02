@@ -32,7 +32,6 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart, onBackgroundGenerate
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center text-white overflow-hidden bg-gray-900 transition-all duration-1000">
-      {/* Dynamic Background */}
       {currentBackground ? (
         <>
           <div 
@@ -44,32 +43,22 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart, onBackgroundGenerate
       ) : (
         <div className="absolute inset-0 overflow-hidden">
              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gray-800 via-gray-900 to-black" />
-             <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_60%,transparent_100%)] opacity-20" />
-             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/30 rounded-full blur-[100px] animate-pulse" />
-             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/30 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }} />
         </div>
       )}
 
-      {/* High Score Badge */}
       <div className="absolute top-6 right-6 flex items-center gap-2 px-5 py-2.5 bg-black/40 backdrop-blur-md rounded-full border border-white/10 text-yellow-400 font-mono font-bold shadow-lg animate-fade-in">
         <Trophy className="w-4 h-4" />
         <span className="tracking-widest">BEST: {highScore.toLocaleString()}</span>
       </div>
 
-      {/* Main Content */}
       <div className="relative z-10 flex flex-col items-center p-6 w-full max-w-4xl">
-        {/* Header Badge */}
         <div className="mb-6 flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-purple-300 backdrop-blur-md shadow-lg animate-fade-in-up">
           <Sparkles className="w-3 h-3" />
-          <span className="tracking-wide">AI POWERED • GEMINI 2.5 & 3.0</span>
+          <span className="tracking-wide">AI POWERED • GEMINI</span>
         </div>
 
-        {/* Hero Title */}
         <h1 className="text-7xl md:text-9xl font-black tracking-tighter italic mb-4 relative group cursor-default">
           <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-gray-200 to-gray-500 drop-shadow-2xl">
-            TETRIS
-          </span>
-          <span className="absolute -inset-1 text-purple-600 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 -z-10">
             TETRIS
           </span>
         </h1>
@@ -78,17 +67,14 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart, onBackgroundGenerate
           The classic puzzle game, reimagined with generative themes and immersive visuals.
         </p>
 
-        {/* Primary Action */}
         <button
           onClick={onStart}
           className="group relative px-10 py-5 bg-white text-black font-bold text-xl rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_-10px_rgba(255,255,255,0.4)] active:scale-95 flex items-center gap-3 mb-12"
         >
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 via-blue-500 to-purple-500 blur opacity-25 group-hover:opacity-50 transition-opacity duration-500 animate-gradient-x" />
           <Play className="w-6 h-6 fill-current relative z-10" />
           <span className="relative z-10 tracking-widest">START GAME</span>
         </button>
 
-        {/* Background Generator UI */}
         <div className={`w-full max-w-md transition-all duration-500 ease-in-out ${showGenUI ? 'opacity-100 translate-y-0' : 'opacity-90 translate-y-2'}`}>
             {!showGenUI ? (
                 <button 
@@ -154,17 +140,6 @@ const TitleScreen: React.FC<TitleScreenProps> = ({ onStart, onBackgroundGenerate
                     </p>
                 </div>
             )}
-        </div>
-
-        {/* Footer Info */}
-        <div className="absolute bottom-6 flex items-center gap-8 text-gray-500 text-[10px] uppercase tracking-widest font-semibold opacity-60">
-          <div className="flex items-center gap-2">
-             <Gamepad2 className="w-3 h-3" /> Gesture Controls
-          </div>
-          <div className="w-px h-3 bg-gray-700" />
-          <div className="flex items-center gap-2">
-             <span className="text-xs">⌨️</span> Keyboard Ready
-          </div>
         </div>
       </div>
     </div>

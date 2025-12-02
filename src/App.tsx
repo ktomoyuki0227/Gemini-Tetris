@@ -8,16 +8,7 @@ import TitleScreen from './components/TitleScreen';
 import { DEFAULT_THEME } from './constants';
 import { Theme } from './types';
 import { audioService } from './services/audioService';
-import { 
-  Play, 
-  RotateCcw, 
-  Pause,
-  Trophy,
-  Zap,
-  Volume2,
-  VolumeX,
-  Home
-} from 'lucide-react';
+import { Play, RotateCcw, Pause, Trophy, Zap, Volume2, VolumeX, Home } from 'lucide-react';
 
 const App: React.FC = () => {
   const {
@@ -43,10 +34,7 @@ const App: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
 
-  // Focus ref for keyboard events
   const gameAreaRef = useRef<HTMLDivElement>(null);
-  
-  // Touch handling refs
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const lastTouchRef = useRef<{ x: number; y: number } | null>(null);
   const isTapRef = useRef<boolean>(false);
@@ -106,10 +94,8 @@ const App: React.FC = () => {
     }
   }, [gameStarted, gameOver, isPaused, movePlayer, dropPlayer, playerRotate, hold]);
 
-  // Set up global key listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-        // Prevent default scrolling for game keys if game is started
         if(gameStarted && ["ArrowUp","ArrowDown","ArrowLeft","ArrowRight", " "].indexOf(e.key) > -1) {
             e.preventDefault();
         }
@@ -122,7 +108,6 @@ const App: React.FC = () => {
     };
   }, [handleKey, gameStarted]);
 
-  // Touch Event Handlers
   const handleTouchStart = (e: React.TouchEvent) => {
       if (!gameStarted || gameOver || isPaused) return;
       const touch = e.touches[0];
@@ -134,7 +119,7 @@ const App: React.FC = () => {
 
   const handleTouchMove = (e: React.TouchEvent) => {
       if (!gameStarted || gameOver || isPaused || !lastTouchRef.current) return;
-      e.preventDefault(); // Prevent scrolling
+      e.preventDefault();
       
       const touch = e.touches[0];
       const deltaX = touch.clientX - lastTouchRef.current.x;
@@ -143,25 +128,22 @@ const App: React.FC = () => {
       touchMoveAccumulator.current.x += deltaX;
       touchMoveAccumulator.current.y += deltaY;
       
-      const MOVE_THRESHOLD = 20; // Pixels to trigger a horizontal move
-      const DROP_THRESHOLD = 30; // Pixels to trigger a drop
+      const MOVE_THRESHOLD = 20;
+      const DROP_THRESHOLD = 30;
 
-      // Horizontal Movement
       if (Math.abs(touchMoveAccumulator.current.x) > MOVE_THRESHOLD) {
           const direction = touchMoveAccumulator.current.x > 0 ? 1 : -1;
           movePlayer(direction);
-          touchMoveAccumulator.current.x = 0; // Reset accumulator after move
+          touchMoveAccumulator.current.x = 0;
           isTapRef.current = false;
       }
 
-      // Vertical Drop (Soft Drop)
       if (touchMoveAccumulator.current.y > DROP_THRESHOLD) {
           dropPlayer();
           touchMoveAccumulator.current.y = 0;
           isTapRef.current = false;
       }
       
-      // Swipe Up for Hold
       if (touchMoveAccumulator.current.y < -DROP_THRESHOLD * 2) {
           hold();
           touchMoveAccumulator.current.y = 0;
@@ -179,7 +161,6 @@ const App: React.FC = () => {
       lastTouchRef.current = null;
   };
 
-  // Prevent default touch behaviors like double-tap zoom
   useEffect(() => {
     const preventDefault = (e: TouchEvent) => e.preventDefault();
     document.addEventListener('touchmove', preventDefault, { passive: false });
@@ -197,7 +178,6 @@ const App: React.FC = () => {
       );
   }
 
-  // Styles for background handling
   const appStyles: React.CSSProperties = customBackground 
     ? { 
         backgroundImage: `url(${customBackground})`,
@@ -217,14 +197,11 @@ const App: React.FC = () => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-        {/* Overlay for readability if custom background is used */}
         {customBackground && (
             <div className="absolute inset-0 bg-black/60 z-0 pointer-events-none" />
         )}
 
-        {/* --- LEFT PANEL (Desktop) / TOP HEADER (Mobile) --- */}
         <div className="flex-shrink-0 md:w-64 p-3 md:p-6 md:h-full z-20 flex flex-row md:flex-col justify-between items-center md:items-start bg-black/20 md:backdrop-blur-sm border-b md:border-b-0 md:border-r border-white/10">
-            {/* Title */}
             <div className="hidden md:block mb-8">
                  <h1 className="text-5xl font-black italic tracking-tighter" style={{ color: theme.accentColor }}>
                      TETRIS
@@ -234,22 +211,18 @@ const App: React.FC = () => {
                  </button>
             </div>
             
-            {/* Desktop Hold */}
             <div className="hidden md:block w-full mb-8">
                 <NextPiece tetromino={holdPiece} theme={theme} label="Hold" />
                 <div className="text-[10px] text-gray-400 mt-1 text-center uppercase tracking-wider font-bold">Press 'C' or Swipe Up</div>
             </div>
 
-            {/* Stats */}
             <div className="flex md:flex-col gap-2 md:gap-4 w-full md:w-auto items-center md:items-stretch justify-around md:justify-start">
-                 {/* Mobile only mini title */}
                  <div className="md:hidden flex items-center gap-2 mr-2">
                      <button onClick={handleHome} className="p-2 bg-white/10 rounded-full">
                          <Home className="w-4 h-4 text-white" />
                      </button>
                  </div>
                  
-                 {/* High Score Panel (Always visible) */}
                  <div className="hidden md:flex flex-col md:bg-black/30 md:p-3 rounded-lg border border-yellow-500/20">
                     <div className="flex items-center gap-1 text-yellow-500 text-[10px] md:text-xs uppercase font-bold tracking-wider">
                          <Trophy className="w-3 h-3" /> Best
@@ -271,7 +244,6 @@ const App: React.FC = () => {
                     <div className="text-lg md:text-2xl font-mono font-bold text-white">{level}</div>
                  </div>
 
-                 {/* Mobile Hold (Mini) */}
                  <div className="md:hidden ml-auto transform scale-75 origin-right flex gap-2">
                      <NextPiece tetromino={holdPiece} theme={theme} label="Hold" />
                      <NextPiece tetromino={nextPiece} theme={theme} label="Next" />
@@ -279,9 +251,7 @@ const App: React.FC = () => {
             </div>
         </div>
 
-        {/* --- CENTER PANEL (Game Board) --- */}
         <div className="flex-1 relative flex flex-col items-center justify-center p-2 md:p-6 min-h-0 z-10">
-            {/* Board Container - constrained by height to ensure 70-80% screen coverage */}
             <div className="relative h-full w-full flex items-center justify-center">
                  <div className="h-full max-h-[75vh] md:max-h-[90vh] aspect-[10/20] relative shadow-2xl">
                      <Board 
@@ -291,7 +261,6 @@ const App: React.FC = () => {
                         isCommitting={isCommitting}
                      />
 
-                     {/* Overlays */}
                     {gameOver && (
                         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/80 backdrop-blur-md rounded-lg p-6 text-center animate-in fade-in zoom-in duration-300">
                             <h2 className="text-4xl font-black text-white mb-2 italic">GAME OVER</h2>
@@ -330,10 +299,8 @@ const App: React.FC = () => {
             </div>
         </div>
 
-        {/* --- RIGHT PANEL (Desktop) / BOTTOM CONTROLS (Mobile) --- */}
         <div className="flex-shrink-0 md:w-64 p-4 z-20 flex flex-col justify-end md:justify-start gap-4 md:bg-black/20 md:backdrop-blur-sm md:border-l border-white/10">
              
-             {/* Desktop: Next Piece & Controls */}
              <div className="hidden md:flex flex-col gap-6 h-full">
                  <div className="flex-none">
                     <NextPiece tetromino={nextPiece} theme={theme} label="Next" />
@@ -357,7 +324,6 @@ const App: React.FC = () => {
                  </div>
              </div>
 
-             {/* Mobile: Gesture Guide */}
              <div className="md:hidden flex flex-col gap-3 pb-safe">
                   <div className="flex justify-between items-center px-2">
                        <button onClick={toggleMute} className="p-2 text-gray-400">

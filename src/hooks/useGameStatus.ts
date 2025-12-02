@@ -6,7 +6,6 @@ export const useGameStatus = (rowsCleared: number) => {
   const [level, setLevel] = useState(0);
   const [prevRowsCleared, setPrevRowsCleared] = useState(0);
   const [highScore, setHighScore] = useState(() => {
-    // Check if window exists to support SSR/build environments safely
     if (typeof window !== 'undefined') {
         const saved = localStorage.getItem('tetris_high_score');
         return saved ? parseInt(saved, 10) : 0;
@@ -22,18 +21,15 @@ export const useGameStatus = (rowsCleared: number) => {
   }, [score, highScore]);
 
   useEffect(() => {
-    // If rowsCleared resets to 0 (game restart), reset internal tracker
     if (rowsCleared === 0) {
         setPrevRowsCleared(0);
         return;
     }
 
-    // Calculate how many rows were just cleared
     const diff = rowsCleared - prevRowsCleared;
 
     if (diff > 0) {
       const linePoints = [40, 100, 300, 1200];
-      // Ensure we don't go out of bounds if something weird happens, though diff should be 1-4
       const points = linePoints[diff - 1] || 0; 
       
       setScore((prev) => prev + points * (level + 1));
