@@ -1,0 +1,5 @@
+{
+  "name": "Gemini Tetris",
+  "description": "A modern, AI-powered Tetris clone. Features responsive gameplay, high scores, and a Gemini-powered theme generator that creates custom visual styles based on your prompts.",
+  "requestFramePermissions": []
+}
