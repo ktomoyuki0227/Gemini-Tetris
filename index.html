@@ -1,9 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gemini Tetris</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+      body { font-family: 'Inter', sans-serif; }
+      /* Custom scrollbar for webkit */
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: #1f2937; }
+      ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+
+      /* Animations */
+      @keyframes shake {
+        0%, 100% { transform: translateY(0); }
+        25% { transform: translateY(2px); }
+        50% { transform: translateY(-2px); }
+        75% { transform: translateY(2px); }
+      }
+      .animate-shake { animation: shake 0.15s cubic-bezier(.36,.07,.19,.97) both; }
+
+      @keyframes flash-white {
+        0% { filter: brightness(3); transform: scale(1.02); }
+        50% { filter: brightness(2); transform: scale(1); }
+        100% { filter: brightness(1); transform: scale(0); opacity: 0; }
+      }
+      .animate-flash { animation: flash-white 0.3s ease-out forwards; }
+    </style>
   <script type="importmap">
 {
   "imports": {
@@ -11,16 +37,12 @@
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "vite": "https://aistudiocdn.com/vite@^7.2.6",
-    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
-    "path": "https://aistudiocdn.com/path@^0.12.7"
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0"
   }
 }
 </script>
 </head>
   <body class="bg-gray-900 text-white overflow-hidden">
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
