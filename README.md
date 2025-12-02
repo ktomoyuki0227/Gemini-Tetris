@@ -1,83 +1,83 @@
 # Gemini Tetris
 
-A modern, AI-powered reimplementation of the classic puzzle game Tetris, built with React, TypeScript, and the Google Gemini API.
+React, TypeScript, Google Gemini APIを使用して構築された、クラシックなパズルゲーム「テトリス」のモダンなAI搭載リメイクです。
 
-This project features responsive gameplay, procedural audio, high score persistence, and deep integration with Generative AI for dynamic theming and background generation.
+このプロジェクトは、レスポンシブなゲームプレイ、プロシージャル（自動生成）オーディオ、ハイスコアの保存機能に加え、生成AIとの深い統合によるダイナミックな背景生成機能を特徴としています。
 
-## Features
+## 特徴
 
-*   **Classic Gameplay**: Authentic Tetris mechanics including 7-bag randomization, wall kicks, soft drops, and hold functionality.
-*   **AI-Powered Backgrounds**: Use **Gemini 3.0 Pro Image Preview** to generate stunning custom background images at 1K, 2K, or 4K resolution directly from the title screen.
-*   **Procedural Audio**: A custom `AudioService` using the Web Audio API to generate synthetic sound effects (SFX) and ambient generative background music (BGM) in real-time. No external audio files required.
-*   **Responsive Design**: Fully playable on Desktop (Keyboard) and Mobile (Touch/Gestures).
-*   **High Scores**: Local storage persistence for tracking your best performance.
-*   **Modern UI**: Glassmorphism-inspired design with animations using Tailwind CSS.
+*   **クラシックなゲームプレイ**: 7種1セットのランダム生成（7-bag）、壁蹴り、ソフトドロップ、ホールド機能など、本格的なテトリスのメカニクスを搭載しています。
+*   **AIによる背景生成**: **Gemini 3.0 Pro Image Preview** を使用して、タイトル画面から直接1K、2K、4K解像度の美しいカスタム背景画像を生成できます。
+*   **プロシージャルオーディオ**: Web Audio APIを使用したカスタム `AudioService` により、効果音 (SFX) とアンビエントなBGMをリアルタイムで合成生成します。外部オーディオファイルは一切使用していません。
+*   **レスポンシブデザイン**: デスクトップ（キーボード操作）とモバイル（タッチ/ジェスチャー操作）の両方で快適にプレイ可能です。
+*   **ハイスコア**: ブラウザのローカルストレージを使用して、あなたのベストスコアを記録・保存します。
+*   **モダンUI**: Tailwind CSSを使用した、グラスモーフィズム（すりガラス風）を取り入れた美しいデザインとアニメーション。
 
-## Tech Stack
+## 使用技術
 
 *   **Frontend**: React 19, TypeScript
 *   **Styling**: Tailwind CSS
 *   **AI Integration**: Google GenAI SDK (`@google/genai`)
 *   **Icons**: Lucide React
-*   **Build Tooling**: (Assumed Vite or similar in a standard environment)
+*   **Build Tooling**: (Vite等の標準的なビルド環境を想定)
 
-## Getting Started
+## 始め方
 
-1.  **Clone the repository**:
+1.  **リポジトリのクローン**:
     ```bash
     git clone https://github.com/your-username/gemini-tetris.git
     cd gemini-tetris
     ```
 
-2.  **Install dependencies**:
+2.  **依存関係のインストール**:
     ```bash
     npm install
     ```
 
-3.  **Set up API Key**:
-    Ensure you have a valid Google Gemini API key exported in your environment as `API_KEY` or configured in your build process.
+3.  **APIキーの設定**:
+    有効な Google Gemini API キーを環境変数 `API_KEY` として設定するか、ビルドプロセスで構成してください。
 
-4.  **Run the application**:
+4.  **アプリケーションの実行**:
     ```bash
     npm start
     ```
 
-## Controls
+## 操作方法
 
-### Desktop (Keyboard)
+### デスクトップ (キーボード)
 
-| Action | Key |
+| アクション | キー |
 | :--- | :--- |
-| **Move Left/Right** | Arrow Left / Arrow Right |
-| **Rotate** | Arrow Up |
-| **Soft Drop** | Arrow Down |
-| **Hold Piece** | Shift or C |
-| **Pause** | Esc |
-| **Mute Audio** | (UI Button) |
+| **左移動 / 右移動** | ← (左矢印) / → (右矢印) |
+| **回転** | ↑ (上矢印) |
+| **高速落下 (ソフトドロップ)** | ↓ (下矢印) |
+| **ホールド (ブロック入替)** | Shift または C |
+| **一時停止** | Esc |
+| **音声ミュート** | (画面上のボタン) |
 
-### Mobile (Touch Gestures)
+### モバイル (タッチジェスチャー)
 
-| Action | Gesture |
+| アクション | ジェスチャー |
 | :--- | :--- |
-| **Move Left/Right** | Slide Finger Horizontally |
-| **Rotate** | Tap Screen |
-| **Soft Drop** | Slide Finger Down |
-| **Hold Piece** | Swipe Up |
+| **左移動 / 右移動** | 指を左右にスライド |
+| **回転** | 画面をタップ |
+| **高速落下 (ソフトドロップ)** | 指を下にスライド |
+| **ホールド (ブロック入替)** | 指を上にスワイプ |
 
-## Project Structure
+## プロジェクト構造
 
-*   **`App.tsx`**: Main application controller. Handles layout, global state (audio, game start), and input routing.
-*   **`hooks/useTetris.ts`**: Core game logic engine. Manages the grid, piece movement, collision detection, and game loop.
-*   **`services/geminiService.ts`**: Interface for Google Gemini API. Handles prompt construction for image generation.
-*   **`services/audioService.ts`**: Web Audio API implementation for generative music and synthesized sound effects.
-*   **`components/TitleScreen.tsx`**: The entry point UI. Contains the "AI Background Studio" for generating custom wallpapers.
-*   **`components/Board.tsx`**: Renders the game grid with animations for line clears and drops.
+*   **`App.tsx`**: メインアプリケーションコントローラー。レイアウト、グローバル状態（オーディオ、ゲーム開始など）、入力ルーティングを管理します。
+*   **`hooks/useTetris.ts`**: コアゲームロジックエンジン。グリッド管理、ピースの移動、衝突判定、ゲームループを制御します。
+*   **`services/geminiService.ts`**: Google Gemini API とのインターフェース。画像生成のためのプロンプト構築などを処理します。
+*   **`services/audioService.ts`**: 生成的な音楽と合成効果音のための Web Audio API 実装です。
+*   **`components/TitleScreen.tsx`**: エントリーポイントとなるUI。「AI Background Studio」を含み、カスタム壁紙の生成を行います。
+*   **`components/Board.tsx`**: ゲームグリッドを描画し、ライン消去や落下のアニメーションを担当します。
 
-## AI Models Used
+## 使用しているAIモデル
 
-*   **Gemini 2.5 Flash**: (Optional) For generating color themes (logic present in `geminiService`).
-*   **Gemini 3.0 Pro Image Preview**: Used for generating high-quality background images.
+*   **Gemini 2.5 Flash**: (オプション) カラーテーマの生成ロジックに使用 (`geminiService`内に実装)。
+*   **Gemini 3.0 Pro Image Preview**: 高品質な背景画像の生成に使用。
 
-## License
+## ライセンス
 
 MIT
